@@ -1,15 +1,12 @@
-from setuptools import setup, find_packages
-import os
 import glob
+import os
+
+from setuptools import find_packages, setup
 
 try:
     import torch
-    from torch.utils.cpp_extension import (
-        BuildExtension,
-        CUDAExtension,
-        CUDA_HOME,
-        CppExtension,
-    )
+    from torch.utils.cpp_extension import (CUDA_HOME, BuildExtension,
+                                           CppExtension, CUDAExtension)
 except:
     raise ModuleNotFoundError("Please install pytorch >= 1.1 before proceeding.")
 
@@ -41,7 +38,7 @@ def get_ext_modules():
     if WITH_CUDA:
         nvcc_flags = os.getenv("NVCC_FLAGS", "")
         nvcc_flags = [] if nvcc_flags == "" else nvcc_flags.split(" ")
-        nvcc_flags += ["-arch=sm_35", "--expt-relaxed-constexpr", "-O2"]
+        nvcc_flags += ["-arch=sm_86", "--expt-relaxed-constexpr", "-O2"]
         extra_compile_args["nvcc"] = nvcc_flags
 
         ext_modules.append(
@@ -81,7 +78,7 @@ this_directory = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(this_directory, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
-requirements = ["torch>=1.1.0", "numba", "numpy<=1.21", "scikit-learn"]
+requirements = []  # "torch>=1.1.0", "numba", "numpy<=1.21", "scikit-learn"]
 
 url = "https://github.com/nicolas-chaulet/torch-points-kernels"
 __version__ = "0.7.1"
